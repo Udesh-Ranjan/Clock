@@ -7,8 +7,8 @@ import java.util.List;
  * @dev :   devpar
  * @date :   02-May-2021
  */
-public class Clock extends JPanel {
-    public Clock(int width,int height){
+public class AnalogClock extends JPanel {
+    public AnalogClock(int width, int height){
         setSize(width,height);
     }
     public void paint(Graphics g){
