@@ -12,6 +12,7 @@ public class AnalogClock extends JPanel {
         setSize(width,height);
     }
     public void paint(Graphics g){
+        g.clearRect(0,0,getWidth(),getHeight());
         drawOuterCircle(g);
         drawInnerCircle(g);
         drawOuterNumbers(g);
@@ -19,6 +20,9 @@ public class AnalogClock extends JPanel {
         drawHoursHand(g);
         drawMinutesHand(g);
         drawSecondsHand(g);
+    }
+    public void update(){
+        repaint();
     }
     public void drawOuterCircle(Graphics g){
         int width=getWidth();
@@ -172,7 +176,7 @@ public class AnalogClock extends JPanel {
                 fillOval((int)x,(int)y,radius,radius,g);
                 System.out.println("x "+x+" y "+y);
 //                drawString(hours+"",(int)x,(int)y,g);
-            }else {
+            }else if(degree % 6==0){
                 double x,y;
                 System.out.println("Minute degree "+degree);
                 double slop=Math.tan(Math.toRadians(degree));
@@ -300,10 +304,10 @@ public class AnalogClock extends JPanel {
         System.out.println(degree);
 
         double x, y;
-        if (minutes == 30 || minutes == 0) {
+        if (seconds == 30 || seconds == 0) {
             System.out.println("infinite : " + degree);
             x = 0;
-            if (minutes == 0) {
+            if (seconds == 0) {
                 y = diameter / 2;
             } else {
                 y = -diameter / 2;
