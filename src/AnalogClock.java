@@ -13,11 +13,21 @@ import java.util.List;
 public class AnalogClock extends JPanel implements ComponentListener {
     private BufferedImage img;
     private Graphics2D g2d;
+    private final Stroke hourHandStroke,minuteHandStroke,secondHandStroke;
+    public void setDefaultGraphicsPro(){
+
+    }
     public AnalogClock(int width, int height){
+        hourHandStroke=new BasicStroke(10);
+        minuteHandStroke=new BasicStroke(5);
+        secondHandStroke=new BasicStroke(2);
         setSize(width,height);
         img=new BufferedImage(width,height,BufferedImage.TYPE_INT_ARGB);
         g2d=(Graphics2D)img.getGraphics();
         this.addComponentListener(this);
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.setColor(Color.BLACK);
+        g2d.setBackground(Color.white);
     }
 
     public void paint(Graphics g){
@@ -119,7 +129,9 @@ public class AnalogClock extends JPanel implements ComponentListener {
         w=metrics.stringWidth(str);
         h=metrics.getHeight();
         System.out.println("x "+(centerX+x)+" y "+(centerY-y));
+        g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         g.drawString(str,centerX+x-w/2,centerY-y+h/4);
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
     }
     public void fillOval(int x,int y,int width,int height,Graphics2D g){
         int centerX=getWidth()/2;
@@ -248,7 +260,10 @@ public class AnalogClock extends JPanel implements ComponentListener {
                 x = -x;
             y = slop * x;
         }
+        Stroke defaultStroke=g.getStroke();
+        g2d.setStroke(hourHandStroke);
         drawLine(0,0,(int)x,(int)y,g);
+        g2d.setStroke(defaultStroke);
     }
     public void drawLine(int x,int y,int x1,int y1,Graphics2D g){
         int centerX=getWidth()/2;
@@ -293,7 +308,10 @@ public class AnalogClock extends JPanel implements ComponentListener {
                 x = -x;
             y = slop * x;
         }
+        Stroke defaultStroke=g.getStroke();
+        g.setStroke(minuteHandStroke);
         drawLine(0,0,(int)x,(int)y,g);
+        g.setStroke(defaultStroke);
     }
     public void drawSecondsHand(Graphics2D g){
         Calendar calendar = new GregorianCalendar();
@@ -341,6 +359,9 @@ public class AnalogClock extends JPanel implements ComponentListener {
         img.flush();
         img=new BufferedImage(getWidth(),getHeight(),BufferedImage.TYPE_INT_ARGB);
         g2d=(Graphics2D)img.getGraphics();
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.setColor(Color.BLACK);
+        g2d.setBackground(Color.white);
         repaint();
     }
 
