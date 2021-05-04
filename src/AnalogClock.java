@@ -1,5 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.List;
 
@@ -7,36 +10,43 @@ import java.util.List;
  * @dev :   devpar
  * @date :   02-May-2021
  */
-public class AnalogClock extends JPanel {
+public class AnalogClock extends JPanel implements ComponentListener {
+    private BufferedImage img;
+    private Graphics2D g2d;
     public AnalogClock(int width, int height){
         setSize(width,height);
+        img=new BufferedImage(width,height,BufferedImage.TYPE_INT_ARGB);
+        g2d=(Graphics2D)img.getGraphics();
+        this.addComponentListener(this);
     }
+
     public void paint(Graphics g){
-        g.clearRect(0,0,getWidth(),getHeight());
-        drawOuterCircle(g);
-        drawInnerCircle(g);
-        drawOuterNumbers(g);
-        drawTicks(g);
-        drawHoursHand(g);
-        drawMinutesHand(g);
-        drawSecondsHand(g);
+        g2d.clearRect(0,0,getWidth(),getHeight());
+        drawOuterCircle(g2d);
+        drawInnerCircle(g2d);
+        drawOuterNumbers(g2d);
+        drawTicks(g2d);
+        drawHoursHand(g2d);
+        drawMinutesHand(g2d);
+        drawSecondsHand(g2d);
+        g.drawImage(img,0,0,this);
     }
     public void update(){
         repaint();
     }
-    public void drawOuterCircle(Graphics g){
+    public void drawOuterCircle(Graphics2D g){
         int width=getWidth();
         int height=getHeight();
         int diameter=Math.min(width,height)/50;
         g.drawOval(width/2-diameter/2,height/2-diameter/2,diameter,diameter);
     }
-    public void drawInnerCircle(Graphics g){
+    public void drawInnerCircle(Graphics2D g){
         int width=getWidth();
         int height=getHeight();
         int diameter=Math.min(width,height);
         g.drawOval(width/2-diameter/2,height/2-diameter/2,diameter,diameter);
     }
-    public void drawOuterNumbers(Graphics g){
+    public void drawOuterNumbers(Graphics2D g){
         List<Integer>list=new LinkedList<>();
         list.add(3);
         list.add(2);
@@ -101,7 +111,7 @@ public class AnalogClock extends JPanel {
                 hrIndex++;
         }
     }
-    public void drawString(String str,int x,int y,Graphics g){
+    public void drawString(String str,int x,int y,Graphics2D g){
         int centerX=getWidth()/2;
         int centerY=getHeight()/2;
         int w,h;
@@ -111,7 +121,7 @@ public class AnalogClock extends JPanel {
         System.out.println("x "+(centerX+x)+" y "+(centerY-y));
         g.drawString(str,centerX+x-w/2,centerY-y+h/4);
     }
-    public void fillOval(int x,int y,int width,int height,Graphics g){
+    public void fillOval(int x,int y,int width,int height,Graphics2D g){
         int centerX=getWidth()/2;
         int centerY=getHeight()/2;
         System.out.println("x "+x+" y "+y);
@@ -120,7 +130,7 @@ public class AnalogClock extends JPanel {
     boolean isInt(double val){
         return val==(int)val;
     }
-    public void drawTicks(Graphics g){
+    public void drawTicks(Graphics2D g){
         int width=getWidth();
         int height=getHeight();
         int diameter=Math.min(width,height)-10;
@@ -176,7 +186,7 @@ public class AnalogClock extends JPanel {
                 fillOval((int)x,(int)y,radius,radius,g);
                 System.out.println("x "+x+" y "+y);
 //                drawString(hours+"",(int)x,(int)y,g);
-            }else if(degree % 6==0){
+            }else if(isInt(degree) && degree % 6==0){
                 double x,y;
                 System.out.println("Minute degree "+degree);
                 double slop=Math.tan(Math.toRadians(degree));
@@ -201,7 +211,7 @@ public class AnalogClock extends JPanel {
             }
         }
     }
-    public void drawHoursHand(Graphics g) {
+    public void drawHoursHand(Graphics2D g) {
         Calendar calendar = new GregorianCalendar();
         int hours = calendar.get(Calendar.HOUR);
         int minutes = calendar.get(Calendar.MINUTE);
@@ -240,12 +250,12 @@ public class AnalogClock extends JPanel {
         }
         drawLine(0,0,(int)x,(int)y,g);
     }
-    public void drawLine(int x,int y,int x1,int y1,Graphics g){
+    public void drawLine(int x,int y,int x1,int y1,Graphics2D g){
         int centerX=getWidth()/2;
         int centerY=getHeight()/2;
         g.drawLine(centerX+x,centerY-y,centerX+x1,centerY-y1);
     }
-    public void drawMinutesHand(Graphics g){
+    public void drawMinutesHand(Graphics2D g){
         Calendar calendar = new GregorianCalendar();
         int hours = calendar.get(Calendar.HOUR);
         int minutes = calendar.get(Calendar.MINUTE);
@@ -285,7 +295,7 @@ public class AnalogClock extends JPanel {
         }
         drawLine(0,0,(int)x,(int)y,g);
     }
-    public void drawSecondsHand(Graphics g){
+    public void drawSecondsHand(Graphics2D g){
         Calendar calendar = new GregorianCalendar();
         int hours = calendar.get(Calendar.HOUR);
         int minutes = calendar.get(Calendar.MINUTE);
@@ -324,5 +334,28 @@ public class AnalogClock extends JPanel {
             y = slop * x;
         }
         drawLine(0,0,(int)x,(int)y,g);
+    }
+
+    @Override
+    public void componentResized(ComponentEvent e) {
+        img.flush();
+        img=new BufferedImage(getWidth(),getHeight(),BufferedImage.TYPE_INT_ARGB);
+        g2d=(Graphics2D)img.getGraphics();
+        repaint();
+    }
+
+    @Override
+    public void componentMoved(ComponentEvent e) {
+
+    }
+
+    @Override
+    public void componentShown(ComponentEvent e) {
+
+    }
+
+    @Override
+    public void componentHidden(ComponentEvent e) {
+
     }
 }
