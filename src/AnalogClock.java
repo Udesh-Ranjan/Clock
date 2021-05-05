@@ -13,14 +13,15 @@ import java.util.List;
 public class AnalogClock extends JPanel implements ComponentListener {
     private BufferedImage img;
     private Graphics2D g2d;
-    private final Stroke hourHandStroke,minuteHandStroke,secondHandStroke;
+    private final Stroke hourHandStroke,minuteHandStroke,secondHandStroke,outerCircleStroke;
     public void setDefaultGraphicsPro(){
 
     }
     public AnalogClock(int width, int height){
-        hourHandStroke=new BasicStroke(10);
+        hourHandStroke=new BasicStroke(10,BasicStroke.CAP_ROUND,BasicStroke.JOIN_MITER);
         minuteHandStroke=new BasicStroke(5);
         secondHandStroke=new BasicStroke(2);
+        outerCircleStroke=new BasicStroke(1);
         setSize(width,height);
         img=new BufferedImage(width,height,BufferedImage.TYPE_INT_ARGB);
         g2d=(Graphics2D)img.getGraphics();
@@ -39,6 +40,17 @@ public class AnalogClock extends JPanel implements ComponentListener {
         drawHoursHand(g2d);
         drawMinutesHand(g2d);
         drawSecondsHand(g2d);
+        var col=g2d.getColor();
+        Color c=new Color(0.0f,0.0f,1f,0.2f);
+        g2d.setColor(c);
+        g2d.fillRect(0,0,getWidth(),getHeight());
+        g2d.setColor(col);
+        col=g2d.getColor();
+        c=new Color(0.0f,0.0f,0f,0.1f);
+        g2d.setColor(c);
+        int dia=Math.min(getWidth(),getHeight());
+        fillOval(0,0,dia,dia,g2d);
+        g2d.setColor(col);
         g.drawImage(img,0,0,this);
     }
     public void update(){
@@ -48,13 +60,23 @@ public class AnalogClock extends JPanel implements ComponentListener {
         int width=getWidth();
         int height=getHeight();
         int diameter=Math.min(width,height)/50;
+        var def=g.getStroke();
+        g.setColor(Color.gray);
+        g.setStroke(outerCircleStroke);
         g.drawOval(width/2-diameter/2,height/2-diameter/2,diameter,diameter);
+        g.setColor(Color.black);
+        g.setStroke(def);
     }
     public void drawInnerCircle(Graphics2D g){
         int width=getWidth();
         int height=getHeight();
         int diameter=Math.min(width,height);
+        var def=g.getStroke();
+        g.setColor(Color.gray);
+        g.setStroke(outerCircleStroke);
         g.drawOval(width/2-diameter/2,height/2-diameter/2,diameter,diameter);
+        g.setColor(Color.black);
+        g.setStroke(def);
     }
     public void drawOuterNumbers(Graphics2D g){
         List<Integer>list=new LinkedList<>();
