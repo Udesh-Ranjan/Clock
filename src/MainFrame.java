@@ -15,6 +15,7 @@ public class MainFrame {
         AnalogClock analogClock=new AnalogClock(width,height);
         frame.add(analogClock);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setTitle("Clock");
         frame.setVisible(true);
         Thread t=new Thread(new RunnableClass(analogClock));
         t.start();
