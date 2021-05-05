@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.font.GlyphVector;
 import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.List;
@@ -14,6 +15,7 @@ public class AnalogClock extends JPanel implements ComponentListener {
     private BufferedImage img;
     private Graphics2D g2d;
     private final Stroke hourHandStroke,minuteHandStroke,secondHandStroke,outerCircleStroke;
+    private Map<Integer,GlyphVector> hoursToGlyph;
     public void setDefaultGraphicsPro(){
 
     }
@@ -29,6 +31,15 @@ public class AnalogClock extends JPanel implements ComponentListener {
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.setColor(Color.BLACK);
         g2d.setBackground(Color.white);
+        hoursToGlyph =new HashMap<>();
+        Font font=new Font(Font.MONOSPACED,Font.BOLD,20);
+        Font def=g2d.getFont();
+        for(int i=1;i<13;i++){
+            if(i==12 || i==6 || i==3 || i==9)
+                hoursToGlyph.put(i,font.createGlyphVector(g2d.getFontRenderContext(),String.valueOf(i)));
+            else
+                hoursToGlyph.put(i,def.createGlyphVector(g2d.getFontRenderContext(),String.valueOf(i)));
+        }
     }
 
     public void paint(Graphics g){
@@ -111,10 +122,11 @@ public class AnalogClock extends JPanel implements ComponentListener {
                     y=slop*x;
                 }
                 System.out.println("x "+x+" y "+y);
-                Font font=g.getFont();
-                g.setFont(new Font(Font.MONOSPACED,Font.BOLD,20));
-                drawString(hours+"",(int)x,(int)y,g);
-                g.setFont(font);
+//                Font font=g.getFont();
+//                g.setFont(new Font(Font.MONOSPACED,Font.BOLD,20));
+//                drawString(hours+"",(int)x,(int)y,g);
+                drawGlyph(hours,(int)x,(int)y,g);
+//                g.setFont(font);
             }else if(degree %30 == 0){
                 double x,y;
                 int hours=list.get(hrIndex);
@@ -137,11 +149,25 @@ public class AnalogClock extends JPanel implements ComponentListener {
                     y=slop*x;
                 }
                 System.out.println("x "+x+" y "+y);
-                drawString(hours+"",(int)x,(int)y,g);
+//                drawString(hours+"",(int)x,(int)y,g);
+                drawGlyph(hours,(int)x,(int)y,g);
             }
             if(degree%30==0)
                 hrIndex++;
         }
+    }
+    public void drawGlyph(int time,int x,int y,Graphics2D g){
+        int centerX=getWidth()/2;
+        int centerY=getHeight()/2;
+        int w,h;
+        FontMetrics metrics=g.getFontMetrics();
+        w=metrics.stringWidth(String.valueOf(time));
+        h=metrics.getHeight();
+        System.out.println("x "+(centerX+x)+" y "+(centerY-y));
+        g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+//        g.drawString(str,centerX+x-w/2,centerY-y+h/4);
+        g.drawGlyphVector(hoursToGlyph.get(time),centerX+x-w/2,centerY-y+h/4);
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
     }
     public void drawString(String str,int x,int y,Graphics2D g){
         int centerX=getWidth()/2;
