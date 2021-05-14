@@ -4,6 +4,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.font.GlyphVector;
 import java.awt.image.BufferedImage;
+import java.io.PrintStream;
 import java.util.*;
 import java.util.List;
 
@@ -12,6 +13,12 @@ import java.util.List;
  * @date :   02-May-2021
  */
 public class AnalogClock extends JPanel implements ComponentListener {
+    private final static PrintStream out;
+    private static final boolean LOGGING;
+    static {
+        out=System.out;
+        LOGGING=false;
+    }
     private BufferedImage img;
     private Graphics2D g2d;
     private final Stroke hourHandStroke,minuteHandStroke,secondHandStroke,outerCircleStroke;
@@ -103,13 +110,13 @@ public class AnalogClock extends JPanel implements ComponentListener {
             if(degree%90==0){
                 double x,y;
                 int hours=list.get(hrIndex);
-                System.out.println("degree "+degree);
+                println("degree "+degree);
                 double slop=Math.tan(Math.toRadians(degree));
-                System.out.println("slop "+slop);
+                println("slop "+slop);
 //                slop=Math.round(slop);
-                System.out.println("round "+slop);
+                println("round "+slop);
                 if(degree == 90 || degree == 270){
-                    System.out.println("infinite : "+degree);
+                    println("infinite : "+degree);
                     x=0;
                     if(degree==90)
                         y=diameter/2;
@@ -121,7 +128,7 @@ public class AnalogClock extends JPanel implements ComponentListener {
                         x=-x;
                     y=slop*x;
                 }
-                System.out.println("x "+x+" y "+y);
+                println("x "+x+" y "+y);
 //                Font font=g.getFont();
 //                g.setFont(new Font(Font.MONOSPACED,Font.BOLD,20));
 //                drawString(hours+"",(int)x,(int)y,g);
@@ -130,13 +137,13 @@ public class AnalogClock extends JPanel implements ComponentListener {
             }else if(degree %30 == 0){
                 double x,y;
                 int hours=list.get(hrIndex);
-                System.out.println("degree "+degree);
+                println("degree "+degree);
                 double slop=Math.tan(Math.toRadians(degree));
-                System.out.println("slop "+slop);
+                println("slop "+slop);
 //                slop=Math.round(slop);
-                System.out.println("round "+slop);
+                println("round "+slop);
                 if(degree == 90 || degree == 270){
-                    System.out.println("infinite : "+degree);
+                    println("infinite : "+degree);
                     x=0;
                     if(degree==90)
                         y=diameter/2;
@@ -148,7 +155,7 @@ public class AnalogClock extends JPanel implements ComponentListener {
                         x=-x;
                     y=slop*x;
                 }
-                System.out.println("x "+x+" y "+y);
+                println("x "+x+" y "+y);
 //                drawString(hours+"",(int)x,(int)y,g);
                 drawGlyph(hours,(int)x,(int)y,g);
             }
@@ -163,7 +170,7 @@ public class AnalogClock extends JPanel implements ComponentListener {
         FontMetrics metrics=g.getFontMetrics();
         w=metrics.stringWidth(String.valueOf(time));
         h=metrics.getHeight();
-        System.out.println("x "+(centerX+x)+" y "+(centerY-y));
+        println("x "+(centerX+x)+" y "+(centerY-y));
         g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 //        g.drawString(str,centerX+x-w/2,centerY-y+h/4);
         g.drawGlyphVector(hoursToGlyph.get(time),centerX+x-w/2,centerY-y+h/4);
@@ -176,7 +183,7 @@ public class AnalogClock extends JPanel implements ComponentListener {
         FontMetrics metrics=g.getFontMetrics();
         w=metrics.stringWidth(str);
         h=metrics.getHeight();
-        System.out.println("x "+(centerX+x)+" y "+(centerY-y));
+        println("x "+(centerX+x)+" y "+(centerY-y));
         g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         g.drawString(str,centerX+x-w/2,centerY-y+h/4);
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
@@ -184,7 +191,7 @@ public class AnalogClock extends JPanel implements ComponentListener {
     public void fillOval(int x,int y,int width,int height,Graphics2D g){
         int centerX=getWidth()/2;
         int centerY=getHeight()/2;
-        System.out.println("x "+x+" y "+y);
+        println("x "+x+" y "+y);
         g.fillOval(centerX+x-width/2,centerY-y-height/2,width,height);
     }
     boolean isInt(double val){
@@ -197,13 +204,13 @@ public class AnalogClock extends JPanel implements ComponentListener {
         for(double degree=0;degree<360;degree+=0.5){
             if(isInt(degree) && degree%90==0){
                 double x,y;
-//                System.out.println("degree "+degree);
+//                println("degree "+degree);
                 double slop=Math.tan(Math.toRadians(degree));
-//                System.out.println("slop "+slop);
+//                println("slop "+slop);
 //                slop=Math.round(slop);
-                System.out.println("round "+slop);
+                println("round "+slop);
                 if(degree == 90 || degree == 270){
-//                    System.out.println("infinite : "+degree);
+//                    println("infinite : "+degree);
                     x=0;
                     if(degree==90)
                         y=diameter/2;
@@ -215,7 +222,7 @@ public class AnalogClock extends JPanel implements ComponentListener {
                         x=-x;
                     y=slop*x;
                 }
-                System.out.println("x "+x+" y "+y);
+                println("x "+x+" y "+y);
 //                Font font=g.getFont();
 //                g.setFont(new Font(Font.MONOSPACED,Font.BOLD,20));
                 int radius=10;
@@ -224,13 +231,13 @@ public class AnalogClock extends JPanel implements ComponentListener {
 //                g.setFont(font);
             }else if(isInt(degree) && degree %30 == 0){
                 double x,y;
-                System.out.println("degree "+degree);
+                println("degree "+degree);
                 double slop=Math.tan(Math.toRadians(degree));
-                System.out.println("slop "+slop);
+                println("slop "+slop);
 //                slop=Math.round(slop);
-                System.out.println("round "+slop);
+                println("round "+slop);
                 if(degree == 90 || degree == 270){
-                    System.out.println("infinite : "+degree);
+                    println("infinite : "+degree);
                     x=0;
                     if(degree==90)
                         y=diameter/2;
@@ -244,17 +251,17 @@ public class AnalogClock extends JPanel implements ComponentListener {
                 }
                 int radius=5;
                 fillOval((int)x,(int)y,radius,radius,g);
-                System.out.println("x "+x+" y "+y);
+                println("x "+x+" y "+y);
 //                drawString(hours+"",(int)x,(int)y,g);
             }else if(isInt(degree) && degree % 6==0){
                 double x,y;
-                System.out.println("Minute degree "+degree);
+                println("Minute degree "+degree);
                 double slop=Math.tan(Math.toRadians(degree));
-                System.out.println("slop "+slop);
+                println("slop "+slop);
 //                slop=Math.round(slop);
-                System.out.println("round "+slop);
+                println("round "+slop);
                 if(degree == 90 || degree == 270){
-                    System.out.println("infinite : "+degree);
+                    println("infinite : "+degree);
                     x=0;
                     if(degree==90)
                         y=diameter/2;
@@ -278,19 +285,19 @@ public class AnalogClock extends JPanel implements ComponentListener {
         int seconds = calendar.get(Calendar.SECOND);
         int diameter = Math.min(getWidth(), getHeight())-100;
         hours = hours % 12;
-        System.out.println("Time"+hours+":"+minutes+":"+seconds);
+        println("Time"+hours+":"+minutes+":"+seconds);
         Map<Integer, Integer> hoursToDegree = new HashMap<>();
         for (int i = 12, degree = 90; i > 0; i--, degree += 30) {
             int deg = degree;
             hoursToDegree.put(i, deg);
         }
-        System.out.println(hoursToDegree);
+        println(hoursToDegree);
         int degree = (hoursToDegree.get(hours) - (int) (minutes * 0.5)) % 180;
-        System.out.println(degree);
+        println(degree);
 
         double x, y;
         if (degree == 90 || degree == 270) {
-            System.out.println("infinite : " + degree);
+            println("infinite : " + degree);
             x = 0;
             if (degree == 90) {
                 y = diameter / 2;
@@ -298,11 +305,11 @@ public class AnalogClock extends JPanel implements ComponentListener {
                 y = -diameter / 2;
             }
         } else {
-            System.out.println("degree " + degree);
+            println("degree " + degree);
             double slop = Math.tan(Math.toRadians(degree));
-            System.out.println("slop " + slop);
+            println("slop " + slop);
 //            slop=Math.round(slop);
-            System.out.println("round " + slop);
+            println("round " + slop);
             x = Math.pow((diameter / 2 * diameter / 2) / (1 + slop * slop), 0.5);
             if (hours>=6)
                 x = -x;
@@ -325,20 +332,20 @@ public class AnalogClock extends JPanel implements ComponentListener {
         int seconds = calendar.get(Calendar.SECOND);
         int diameter = Math.min(getWidth(), getHeight())-60;
         hours = hours % 12;
-        System.out.println("Time"+hours+":"+minutes+":"+seconds);
+        println("Time"+hours+":"+minutes+":"+seconds);
         Map<Integer, Double> minutesToDegree = new HashMap<>();
         double degree = 90+6;
         for (int i = 59 ; i >=0; i--, degree += 6) {
             double deg = degree;
             minutesToDegree.put(i, deg);
         }
-        System.out.println(minutesToDegree);
+        println(minutesToDegree);
         degree = (int)((double)minutesToDegree.get(minutes)) % 180;
-        System.out.println(degree);
+        println(degree);
 
         double x, y;
         if (minutes == 30 || minutes == 0) {
-            System.out.println("infinite : " + degree);
+            println("infinite : " + degree);
             x = 0;
             if (minutes == 0) {
                 y = diameter / 2;
@@ -346,11 +353,11 @@ public class AnalogClock extends JPanel implements ComponentListener {
                 y = -diameter / 2;
             }
         } else {
-            System.out.println("degree " + degree);
+            println("degree " + degree);
             double slop = Math.tan(Math.toRadians(degree));
-            System.out.println("slop " + slop);
+            println("slop " + slop);
 //            slop=Math.round(slop);
-            System.out.println("round " + slop);
+            println("round " + slop);
             x = Math.pow((diameter / 2 * diameter / 2) / (1 + slop * slop), 0.5);
             if (minutes>30)
                 x = -x;
@@ -368,20 +375,20 @@ public class AnalogClock extends JPanel implements ComponentListener {
         int seconds = calendar.get(Calendar.SECOND);
         int diameter = Math.min(getWidth(), getHeight())-30;
         hours = hours % 12;
-        System.out.println("Time"+hours+":"+minutes+":"+seconds);
+        println("Time"+hours+":"+minutes+":"+seconds);
         Map<Integer, Double> secondsToDegree = new HashMap<>();
         double degree = 90+6;
         for (int i = 59 ; i >=0; i--, degree += 6) {
             double deg = degree;
             secondsToDegree.put(i, deg);
         }
-        System.out.println(secondsToDegree);
+        println(secondsToDegree);
         degree = (int)((double)secondsToDegree.get(seconds)) % 180;
-        System.out.println(degree);
+        println(degree);
 
         double x, y;
         if (seconds == 30 || seconds == 0) {
-            System.out.println("infinite : " + degree);
+            println("infinite : " + degree);
             x = 0;
             if (seconds == 0) {
                 y = diameter / 2;
@@ -389,11 +396,11 @@ public class AnalogClock extends JPanel implements ComponentListener {
                 y = -diameter / 2;
             }
         } else {
-            System.out.println("degree " + degree);
+            println("degree " + degree);
             double slop = Math.tan(Math.toRadians(degree));
-            System.out.println("slop " + slop);
+            println("slop " + slop);
 //            slop=Math.round(slop);
-            System.out.println("round " + slop);
+            println("round " + slop);
             x = Math.pow((diameter / 2 * diameter / 2) / (1 + slop * slop), 0.5);
             if (seconds>30)
                 x = -x;
@@ -401,7 +408,14 @@ public class AnalogClock extends JPanel implements ComponentListener {
         }
         drawLine(0,0,(int)x,(int)y,g);
     }
-
+    private void println(final Object str){
+        if(LOGGING)
+            out.println(str);
+    }
+    private void print(final String str){
+        if(LOGGING)
+            out.print(str);
+    }
     @Override
     public void componentResized(ComponentEvent e) {
         img.flush();
