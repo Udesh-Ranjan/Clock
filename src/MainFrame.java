@@ -27,7 +27,7 @@ public class MainFrame {
 			clock=new DigitalClock(width,height);
 			frame.add((DigitalClock)clock);
 		}
-		frame.setUndecorated(true);
+		//frame.setUndecorated(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setTitle("Clock");
 		frame.setVisible(true);
