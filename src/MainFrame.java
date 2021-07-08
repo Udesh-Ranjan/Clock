@@ -31,7 +31,7 @@ public class MainFrame {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setTitle("Clock");
 		frame.setVisible(true);
-		Thread t = new Thread(new RunnableClass(clock,false));
+		Thread t = new Thread(new RunnableClass(clock,analog));
 		t.start();
 
 	}

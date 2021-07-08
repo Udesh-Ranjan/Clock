@@ -29,7 +29,7 @@ public class DigitalClock extends JPanel implements ComponentListener,Clock{
 	private void registerFont(){
 		try{
 			goblin=Font.createFont(Font.TRUETYPE_FONT,
-					new File("/home/dev/Documents/javaPro/Clock/src/a-goblin-appears-font/AGoblinAppears-o2aV.ttf"))
+					new File("./a-goblin-appears-font/AGoblinAppears-o2aV.ttf"))
 				.deriveFont(12f);
 			GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(goblin);
 			goblinFontRegistered=true;
@@ -72,7 +72,7 @@ public class DigitalClock extends JPanel implements ComponentListener,Clock{
 		g.drawImage(img,0,0,getWidth(),getHeight(),this);
 	}
 	public int getFontSize(Graphics g){
-		System.out.println("getFontSize");
+		//System.out.println("getFontSize");
 		int size=20;
 		while(true){
 			int newSize=size+1;
@@ -91,9 +91,9 @@ public class DigitalClock extends JPanel implements ComponentListener,Clock{
 			if((Math.max(timeWidth,dateWidth)/getWidth())*100>=70)
 				break;
 			size=newSize;
-			System.out.println("size : "+size);
+			//System.out.println("size : "+size);
 		}
-		System.out.println("Exiting getFontSize");
+		//System.out.println("Exiting getFontSize");
 		return size;
 	}
 	public void update(){
@@ -116,7 +116,7 @@ public class DigitalClock extends JPanel implements ComponentListener,Clock{
 		g.setColor(timeColor);
 		final Font font=g.getFont();
 		final int fontSize=getFontSize(g);
-		System.out.println("fontSize : "+fontSize);
+		//System.out.println("fontSize : "+fontSize);
 		final Font timeFont=new Font("Monospaced",Font.PLAIN,fontSize);
 		//Font timeFont=goblin.deriveFont(fontSize);
 		g.setFont(timeFont);
@@ -190,7 +190,7 @@ public class DigitalClock extends JPanel implements ComponentListener,Clock{
 	}
 	public void componentMoved(ComponentEvent event){}
 	public void componentResized(ComponentEvent event){
-		System.out.println("resized");
+		//System.out.println("resized");
 		if(img!=null){
 			img.flush();
 			img.getGraphics().dispose();
