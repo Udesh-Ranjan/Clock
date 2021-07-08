@@ -12,7 +12,7 @@ import java.util.List;
  * @dev :   devpar
  * @date :   02-May-2021
  */
-public class AnalogClock extends JPanel implements ComponentListener {
+public class AnalogClock extends JPanel implements ComponentListener , Clock{
     private final static PrintStream out;
     private static final boolean LOGGING;
     static {
