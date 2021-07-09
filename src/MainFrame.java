@@ -1,4 +1,3 @@
-import javax.sound.sampled.LineUnavailableException;
 import javax.swing.*;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -48,20 +47,12 @@ class RunnableClass implements Runnable {
 
 	@Override
 	public void run() {
-		int seconds=(new GregorianCalendar()).get(Calendar.SECOND);
 		while (true) {
 			clock.update();
 			try {
-				if(seconds!=(new GregorianCalendar()).get(Calendar.SECOND)){
-					if(tickSound)
-						Sound.tone(5000, 5);
-					seconds=(new GregorianCalendar()).get(Calendar.SECOND);
-				}
 				Thread.sleep(100);
 			} catch (InterruptedException ex) {
 				ex.printStackTrace();
-			} catch (LineUnavailableException e) {
-				e.printStackTrace();
 			}
 		}
 	}

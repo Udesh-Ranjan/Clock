@@ -20,8 +20,12 @@ public class DigitalClock extends JPanel implements ComponentListener,Clock{
 	BufferedImage img;
 	Font goblin;
 	boolean goblinFontRegistered;
+	private int dateIndex;
+	private long prev;
 	public DigitalClock(final int width,final int height){
 		//registerFont();
+		dateIndex=0;
+		prev=System.currentTimeMillis();
 		this.addComponentListener(this);
 		img=new BufferedImage(width,height,BufferedImage.TYPE_4BYTE_ABGR);
 		setSize(width,height);
@@ -96,6 +100,10 @@ public class DigitalClock extends JPanel implements ComponentListener,Clock{
 		//System.out.println("Exiting getFontSize");
 		return size;
 	}
+	public void incrDateIndex(){
+		dateIndex++;
+	}
+
 	public void update(){
 		if(img==null){
 			System.out.println("Img is null cannot update");
@@ -105,6 +113,10 @@ public class DigitalClock extends JPanel implements ComponentListener,Clock{
 		if(g==null){
 			System.out.println("graphics is null cannot update");
 			return;
+		}
+		if(System.currentTimeMillis()-prev>=1000){
+			incrDateIndex();
+			prev=System.currentTimeMillis();
 		}
 		g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
 				RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
@@ -135,14 +147,16 @@ public class DigitalClock extends JPanel implements ComponentListener,Clock{
 		g.setFont(font);
 		repaint();
 	}
-	public static String getDate(){
+	public  String getDate(){
 		final Calendar calendar=new GregorianCalendar();
 		final int week=calendar.get(Calendar.DAY_OF_WEEK);
 		final int date=calendar.get(Calendar.DATE);
 		final int month=calendar.get(Calendar.MONTH);
 		final int year=calendar.get(Calendar.YEAR);
-		final String dateStr=toCamelCase(DayOfWeek.of(week-1).name())+", "+date+DigitalClock.getDateSuffix(date)+" "+
+		String dateStr=toCamelCase(DayOfWeek.of(week-1).name())+", "+date+DigitalClock.getDateSuffix(date)+" "+
 			toCamelCase(Month.of(month).name())+" "+year;
+		final int index=dateIndex%dateStr.length();
+		dateStr=dateStr.substring(0,index)+dateStr.substring(index,index+1).toUpperCase()+dateStr.substring(index+1,dateStr.length());
 		return dateStr;
 	}
 	public static String getDateSuffix(final int date){
